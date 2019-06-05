@@ -1,0 +1,76 @@
+;; Copyright © 2017, Red Elvis.
+
+;; Aero configuration for DB access
+
+{ :secrets #include #join [#env HOME "/.secrets.edn"]
+
+ :port #or [#env UCCX_PORT 1504]
+ :uccx_srv #or [#env UCCX_SRV "atea_dev_uccx11"]
+ :uccx_ip #or [#env UCCX_IP "9.1.1.62"]
+ :uccx_sec_srv #or [#env UCCX_SEC_SRV "9.1.1.64"]
+ :uccx_sec_ip #or [#env UCCX_SEC_IP "9.1.1.64"]
+ :uccx_db  #or [#env UCCX_DB "db_cra"]
+ :hrpasswd #or [#env HR_PASS "ateasystems0916"]
+ :wallpasswd #or [#env WALL_PASS "ateasystems0916"]
+
+ :uccx_hr
+ {:poolname  "Uccx-HRStats"
+  :username  "uccxhruser"
+  :password  #ref [:hrpasswd]
+  :conn-timeout  2000
+  :idle-timeout  3000
+  :max-lifetime  10000
+  :max-pool-size 5
+  :uri    #join [ "jdbc:informix-sqli://"
+                 #ref [:uccx_ip]
+                 ":"
+                 #ref [:port]
+                 "/"
+                 #ref [:uccx_db]
+                 ":informixserver="
+                 #ref [:uccx_srv]
+                 "_uccx"
+                 ]
+  }
+
+ :uccx_rt
+ {:pool-name "Uccx-RTStats"
+  :username  "uccxwallboard"
+  :password  #ref [:wallpasswd]
+  :conn-timeout  2000
+  :idle-timeout  3000
+  :max-lifetime  10000
+  :max-pool-size 5
+  :uri       #join [ "jdbc:informix-sqli://"
+                    #ref [:uccx_ip]
+                    ":"
+                    #ref [:port]
+                    "/"
+                    #ref [:uccx_db]
+                    ":informixserver="
+                    #ref [:uccx_srv]
+                    "_uccx"
+                    ]
+
+  }
+
+ :web-server
+ #profile {:dev {:host "localhost:6666"
+                 :port 6666}
+           :prod {;; We use an environment variable so that the host
+                  ;; can be passed in at runtime. Note, it's best
+                  ;; practice to use a pre-configured host-name,
+                  ;; i.e. edge.juxt.cloud. Roll can assist in the
+                  ;; configuration of route-53 host-names and
+                  ;; assignment to load-balancers.
+                  :host #env EDGE_HOST
+                  :port 3080}}
+
+ :selmer
+ {:template-caching?
+  #profile {:dev false
+            :test false
+            :pre-prod true
+            :prod true}}
+
+ }
