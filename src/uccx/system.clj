@@ -5,6 +5,8 @@
    [clojure.java.io :as io]
    [com.stuartsierra.component :refer [system-map system-using]]
    [duct.component.hikaricp :refer [hikaricp]]
+   [uccx.schema  :as schema]
+   [uccx.server :as server]
    )
   )
 
@@ -31,9 +33,16 @@
   []
   {})
 
-(defn new-system
+(defn old-system
   "Construct a new system, configured with the given profile"
   [profile]
   (let [config (config profile)]
     (-> (new-system-map config)
-        (system-using (new-dependency-map)))))
+       (system-using (new-dependency-map)))))
+
+
+(defn new-system
+  []
+  (merge (system-map)
+         (server/new-server)
+         (schema/new-schema-provider)))

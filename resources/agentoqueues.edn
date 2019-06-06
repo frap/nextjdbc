@@ -1,0 +1,7 @@
+({:resourceloginid "agent3", :csqname "Sales"}
+ {:resourceloginid "agent2", :csqname "Sales"}
+ {:resourceloginid "agent3", :csqname "Queue3"}
+ {:resourceloginid "agent3", :csqname "Queue4"}
+ {:resourceloginid "agent3", :csqname "Dev"}
+ {:resourceloginid "agent1", :csqname "Dev"}
+ {:resourceloginid "agent2", :csqname "Dev"})

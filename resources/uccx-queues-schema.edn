@@ -1,0 +1,23 @@
+{:objects
+ {:UccxQueue
+  {:description "A Uccx call Queue."
+   :fields
+   {
+    :csqname {:type (non-null String)}
+    :totalcalls {:type Int
+                 :description "Total calls for this Queue."}
+    :callswaiting {:type Int
+                   :description "Calls waiting on this Queue."}
+    :callshandled {:type Int
+                   :description "Handled calls for this Queue."} 
+    :callsabandoned {:type Int
+                     :description "Abandoned calls for this Queue."} 
+    }}}
+
+ :queries
+ {:queue_by_name
+  {:type :UccxQueue
+   :description "Access a Uccx Queue by its name, if it exists."
+   :args
+   {:csqname {:type String}}
+   :resolve :query/queue-by-name}}}
