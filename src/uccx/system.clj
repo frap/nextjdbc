@@ -7,6 +7,7 @@
    [duct.component.hikaricp :refer [hikaricp]]
    [uccx.schema  :as schema]
    [uccx.server :as server]
+   [uccx.db-local :as db]
    )
   )
 
@@ -45,4 +46,5 @@
   []
   (merge (system-map)
          (server/new-server)
-         (schema/new-schema-provider)))
+         (schema/new-schema-provider)
+         (db/new-db)))

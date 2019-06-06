@@ -5,7 +5,15 @@
    [com.walmartlabs.lacinia.util :as util]
    [com.walmartlabs.lacinia.schema :as schema]
    [com.stuartsierra.component :as component]
+   [uccx.db-local :as db]
    [clojure.edn :as edn]))
+
+
+(defn queue-by-name
+  [db]
+  (fn [_ args _]
+    (db/find-queue-by-name db (:csqname args))))
+
 
 (defn resolve-queue-by-name
   [queues-map context args value]

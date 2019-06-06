@@ -9,5 +9,8 @@
   <root level="debug">
     <appender-ref ref="STDOUT"/>
   </root>
-
+ 
+ <logger name="com.zaxxer" level="DEBUG"/>
+ <logger name="io.pedestal" level="INFO"/>
+ <logger name="uccx" level="DEBUG"/>
 </configuration>
