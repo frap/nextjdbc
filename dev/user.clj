@@ -14,7 +14,10 @@
    [aero.core :as aero]
    [uccx.system :as system]
    [uccx.sql :as sql]
+   [uccx.db :as db]
    [clojure.java.io :as io]
+   [io.aviso.logging.setup]
+   [io.pedestal.log :as log]
    [io.aviso.logging.setup]
    )
   )
@@ -26,14 +29,14 @@
    (system/new-system-map (system/config :dev))
    (system/new-dependency-map)))
 
+(def hrpool (db/hikaricp (:uccx_rt (system/config :dev))))
 ;;(alter-var-root #'default-config assoc :color true :reporters ["documentation"])
 ;;(alter-var-root #'log/*logger-factory* (constantly (log-service/make-factory log-config)))
 
 ;;(reloaded.repl/set-init! new-dev-system)
-
+(defonce system nil)
 ;;(def schema (s/load-schema))
-(defonce system (system/new-system))
-
+;;(defonce system (system/new-system))
 (defn q
   [query-string]
   (-> system
@@ -42,21 +45,37 @@
      (lacinia/execute query-string nil nil))
   )
 
-;;(defonce server nil)
 (defn start
   []
-  (alter-var-root #'system component/start-system)
+  (alter-var-root #'system (fn [_]
+                             (->  (system/new-system :dev)
+                                 component/start-system)))
   (browse-url "http://localhost:8888/")
   :started)
 
 (defn stop
   []
-  (alter-var-root #'system component/stop-system)
+  (when (some? system)
+    (component/stop-system system)
+    (alter-var-root #'system (constantly nil)))
   :stopped)
+
+(comment
+  (start)
+  (stop)
+  )
+
 
 (defn test-all []
   (run-all-tests #"uccx.*test$"))
 
 (defn reset-and-test []
-;;  (reset)
+  ;;  (reset)
   (time (test-all)))
+
+
+;; Assuming require [clojure.tools.logging :as log]
+;;(Thread/setDefaultUncaughtExceptionHandler
+;; (reify Thread$UncaughtExceptionHandler
+;;   (uncaughtException [_ thread ex]
+;;    (log/error ex "Uncaught exception on" (.getName thread)))))

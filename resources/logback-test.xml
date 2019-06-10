@@ -12,5 +12,5 @@
  
  <logger name="com.zaxxer" level="DEBUG"/>
  <logger name="io.pedestal" level="INFO"/>
- <logger name="uccx" level="DEBUG"/>
+ <logger name="uccx.db" level="DEBUG"/>
 </configuration>

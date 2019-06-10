@@ -1,4 +1,4 @@
-(ns uccx.system-tests
+(ns uccx.system-test
   (:require
    [clojure.test :refer [deftest is]]
    [uccx.system :as system]
@@ -24,10 +24,10 @@
         results (q system
                    "{ queue_by_name(csqname: \"Dev\") { csqname callshandled callsabandoned totalcalls }}"
                    nil)]
-    (is (= {:data {:game_by_id {:classhandled 2
-                                :callsabandoned 2
-                                :csqname "Zertz"
-                                :totalcalls nil
-                                }}}
+    (is (= {:data {:queue_by_name {:classhandled 2
+                                   :callsabandoned 2
+                                   :csqname "Dev"
+                                   :totalcalls nil
+                                   }}}
            results))
     (component/stop-system system)))
