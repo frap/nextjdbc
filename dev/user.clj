@@ -46,7 +46,7 @@
 (defn start
   []
   (alter-var-root #'system (fn [_]
-                             (-> (system/new-system :dev)
+                             (-> :dev (system/new-system)
                                 component/start-system)))
   (browse-url "http://localhost:8888/")
   :started)

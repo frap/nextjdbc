@@ -33,26 +33,27 @@
                  ]
   }
 
- :uccx_rt
- {:pool-name "Uccx-RTStats"
-  :username  "uccxwallboard"
-  :password  #ref [:wallpasswd]
-  :conn-timeout  250
-  :idle-timeout  2000
-  :max-lifetime  10000
-  :max-pool-size 5
-  :uri       #join [ "jdbc:informix-sqli://"
-                    #ref [:uccx_ip]
-                    ":"
-                    #ref [:port]
-                    "/"
-                    #ref [:uccx_db]
-                    ":informixserver="
-                    #ref [:uccx_srv]
-                    "_uccx"
-                    ]
+ :uccx_rt {:db-spec 
 
-  }
+           {:pool-name "Uccx-RTStats"
+            :username  "uccxwallboard"
+            :password  #ref [:wallpasswd]
+            :conn-timeout  250
+            :idle-timeout  2000
+            :max-lifetime  10000
+            :max-pool-size 5
+            :uri       #join [ "jdbc:informix-sqli://"
+                              #ref [:uccx_ip]
+                              ":"
+                              #ref [:port]
+                              "/"
+                              #ref [:uccx_db]
+                              ":informixserver="
+                              #ref [:uccx_srv]
+                              "_uccx"
+                              ]
+
+            }}
 
  :web-server
  #profile {:dev {:host "localhost:6666"

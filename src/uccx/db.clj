@@ -20,15 +20,15 @@
    :password ""})
 
 ;; db-spec format: https://github.com/tomekw/hikari-cp#configuration-options
-(defrecord Hikari [db-spec datasource]
+(defrecord Hikari [db-spec]
   component/Lifecycle
   (start [component]
-    (let [s (or datasource (hikari/make-datasource db-spec))]
+    (let [s (hikari/make-datasource db-spec)]
       (assoc component :datasource s)))
   (stop [component]
-    (when datasource
+    (when-let [s (:datasource component)]
       (try
-        (hikari/close-datasource datasource)
+        (hikari/close-datasource s)
         (catch Exception e
           (log/warn e "Error while stopping uccx db"))))
     (assoc component :datasource nil)))
