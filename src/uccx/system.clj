@@ -4,10 +4,10 @@
    [aero.core :as aero]
    [clojure.java.io :as io]
    [com.stuartsierra.component :refer [system-map system-using]]
-   [duct.component.hikaricp :refer [hikaricp]]
+   ;;   [duct.component.hikaricp :refer [hikaricp]]
    [uccx.schema  :as schema]
    [uccx.server :as server]
-   [uccx.db-local :as db]
+   [uccx.db :as db]
    )
   )
 
@@ -18,13 +18,12 @@
   [profile]
   (aero/read-config (io/resource "config.edn") {:profile profile}))
 
-
 (defn new-system-map
   "Create the system. See https://github.com/stuartsierra/component"
   [config]
   (system-map
-   :db-hr       (hikaricp    (:uccx_hr config))
-   :db-rt       (hikaricp    (:uccx_rt config))
+   ;;  :db-hr       (hikaricp    (:uccx_hr config))
+   ;; :db-rt       (hikaricp    (:uccx_rt config))
    ;;  :uccx-stats  (new-localdb)
    ))
 
@@ -43,8 +42,9 @@
 
 
 (defn new-system
-  []
-  (merge (system-map)
-         (server/new-server)
-         (schema/new-schema-provider)
-         (db/new-db)))
+  [profile]
+  (let [config (config profile)]
+    (merge (system-map)
+           (server/new-server)
+           (schema/new-schema-provider)
+           (db/new-hikari-cp (:uccx_rt config)))))
