@@ -6,11 +6,12 @@
     </encoder>
   </appender>
 
-  <root level="debug">
+  <root level="INFO">
     <appender-ref ref="STDOUT"/>
   </root>
  
- <logger name="com.zaxxer" level="DEBUG"/>
+  <logger name="com.zaxxer" level="DEBUG"/>
+  <logger name=" org.eclipse.jetty" level="INFO"/>
  <logger name="io.pedestal" level="INFO"/>
  <logger name="uccx.db" level="DEBUG"/>
 </configuration>

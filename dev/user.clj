@@ -14,26 +14,25 @@
    [aero.core :as aero]
    [uccx.system :as system]
    [uccx.sql :as sql]
+   [uccx.db :as db]
    [clojure.java.io :as io]
    [io.pedestal.log :as log]
+   [io.aviso.logging.setup]
    )
   )
 
-(defn new-dev-system
-  "Create a development system"
-  []
-  (component/system-using
-   (system/new-system-map (system/config :dev))
-   (system/new-dependency-map)))
 
+#_(def hrpool (db/hikaricp (:uccx_rt (system/config :dev))))
 ;;(alter-var-root #'default-config assoc :color true :reporters ["documentation"])
 ;;(alter-var-root #'log/*logger-factory* (constantly (log-service/make-factory log-config)))
 
 ;;(reloaded.repl/set-init! new-dev-system)
 
+
 ;; if code for namespace is reloaded the system Var will maintain its value
 (defonce system nil)
 ;;(defonce system (system/new-system))
+
 
 (defn q
   [query-string]
@@ -46,8 +45,8 @@
 (defn start
   []
   (alter-var-root #'system (fn [_]
-                             (-> :dev (system/new-system)
-                                component/start-system)))
+                             (->  (system/new-system :dev)
+                                 component/start-system)))
   (browse-url "http://localhost:8888/")
   :started)
 
@@ -68,5 +67,12 @@
   (run-all-tests #"uccx.*test$"))
 
 (defn reset-and-test []
-;;  (reset)
+  ;;  (reset)
   (time (test-all)))
+
+
+;; Assuming require [clojure.tools.logging :as log]
+;;(Thread/setDefaultUncaughtExceptionHandler
+;; (reify Thread$UncaughtExceptionHandler
+;;   (uncaughtException [_ thread ex]
+;;    (log/error ex "Uncaught exception on" (.getName thread)))))

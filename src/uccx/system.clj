@@ -21,11 +21,12 @@
 (defn new-system-map
   "Create the system. See https://github.com/stuartsierra/component"
   [config]
-  (system-map
+  ;(system-map
    ;;  :db-hr       (hikaricp    (:uccx_hr config))
    ;; :db-rt       (hikaricp    (:uccx_rt config))
    ;;  :uccx-stats  (new-localdb)
-   ))
+;  )
+)
 
 (defn new-dependency-map
   "Declare the dependency relationships between components. See
@@ -47,4 +48,5 @@
     (merge (system-map)
            (server/new-server)
            (schema/new-schema-provider)
-           (db/new-hikari-cp (:uccx_rt config)))))
+           (db/hikaricp (:uccx_hr config)))))
+
